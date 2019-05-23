@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <locale.h>
 
+//fflush
+
+
 //Declaração de variáveis
 int num = 0;
 //Variáveis para posições dos vetores professor, disciplina e turma
@@ -36,7 +39,6 @@ int escolhaDisciplina, escolhaProfessor, escolhaHorario;
 
   // Função para cadastro de Professores
     void cadastrarProfessores(){
-    	do{
         printf("\n====================================================\n OPÇÃO ESCOLHIDA:   1   | Cadastro de professores\n====================================================\n\n");
         printf("Nome: ");
         scanf("%s" ,&prof[posicaoProfessor].nome);
@@ -62,7 +64,6 @@ int escolhaDisciplina, escolhaProfessor, escolhaHorario;
             printf("Digite uma opção válida");
             break;
         }
-    } while (posicaoProfessor <= 2);
       }
 
       //Função para cadastro de disciplinas
@@ -123,8 +124,8 @@ int escolhaDisciplina, escolhaProfessor, escolhaHorario;
               case 2:
                 menu();
                 break;
-              //case 3:
-                //exibirTurmas();
+              case 8:
+                exibirTurmas();
               default:
                 printf("Digite uma opção válida");
                 break;
