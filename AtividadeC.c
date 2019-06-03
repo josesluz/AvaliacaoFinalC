@@ -1,202 +1,291 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <locale.h>
 
-//fflush
+typedef struct{
+	char nome[100];
+	char cargo[30];
+	char dedicacaoExclusiva;
+	char titulacao;
+} professor;
 
+typedef struct{
+	char nome[20];
+	int cargaHoraria;
+} disciplina;
 
-//Declaração de variáveis
-int num = 0;
-//Variáveis para posições dos vetores professor, disciplina e turma
-int posicaoProfessor = 0,posicaoDisciplina = 0, posicaoTurma = 0;
-//Variáveis para opção de escolha dos switch
-int opcaoMenu, opcaoProfessor, opcaoDisciplina, opcaoTurma;
-//Variáveis da estrutura de criação da turma
-int escolhaDisciplina, escolhaProfessor, escolhaHorario;
+typedef struct{
+	disciplina disciplinaTurma;
+	professor professorTurma;
+	char horario[30];	
+} turma;
 
-  //Struct Professor
-  typedef struct{
-      char nome[20];
-      char cargo[30];
-      char dedicacaoExclusiva;
-      char titulacao;
-  } professor;
+typedef struct{
+	char nome[40];
+	int quantidadeTurmasCursadas;
+	turma turmaAluno[25];
+	float notas[25];
+	float media;
+} aluno;
 
-//Struct Disciplina
-  typedef struct{
-      char nomeDisciplina[20];
-      int cargaHoraria;
-  } disciplina;
+int quantidadeProfessores = 0, quantidadeDisciplinas = 0, quantidadeTurmas = 0, quantidadeAlunos = 0, maisTurma, numeroTurma, numerodeTurmas = 0, i, j, k;
+professor prof[20];
+disciplina disc[20];
+turma turm[25];
+aluno al[500];
 
-//Struct Turma
-  typedef struct{
-      char horarioTurma;
-  } turma;
-
-  professor prof[3];
-  disciplina disc[20];
-  turma turm[25];
-
-  // Função para cadastro de Professores
-    void cadastrarProfessores(){
-        printf("\n====================================================\n OPÇÃO ESCOLHIDA:   1   | Cadastro de professores\n====================================================\n\n");
-        printf("Nome: ");
-        scanf("%s" ,&prof[posicaoProfessor].nome);
-        printf("Cargo: ");
-        scanf("%s" ,&prof[posicaoProfessor].cargo);
-        printf("Dedicação Exclusiva (S - Sim | N - Não): ");
-        scanf("%s" ,&prof[posicaoProfessor].dedicacaoExclusiva);
-        printf("Titulação (G - Graduado | E - Especialista | M - Mestre | D - Doutor ): ");
-        scanf("%s" ,&prof[posicaoProfessor].titulacao);
-        printf("\nESCOLHA UMA OPÇÃO: 1 - Realizar novo cadastro | 2 - Voltar ao menu:\n" );
-        printf("OPÇÃO: ");
-        scanf("%i", &opcaoProfessor);
-
-        switch (opcaoProfessor) {
-          case 1:
-            posicaoProfessor++;
-            cadastrarProfessores();
-            break;
-          case 2:
-            menu();
-            break;
-          default:
-            printf("Digite uma opção válida");
-            break;
-        }
-      }
-
-      //Função para cadastro de disciplinas
-      void cadastrarDisciplinas(){
-          printf("\n====================================================\n OPÇÃO ESCOLHIDA:    2   | Cadastro de Disciplinas\n====================================================\n\n");
-          printf("Disciplina: ");
-          scanf("%s" ,&disc[posicaoDisciplina].nomeDisciplina);
-          printf("Carga Horária: ");
-          scanf("%i" ,&disc[posicaoDisciplina].cargaHoraria);
-          printf("\nESCOLHA UMA OPÇÃO: 1 - Realizar novo cadastro | 2 - Voltar ao menu\n" );
-          printf("OPÇÃO: ");
-          scanf("%i", &opcaoDisciplina);
-
-          switch (opcaoDisciplina) {
-            case 1:
-              posicaoDisciplina++;
-              cadastrarDisciplinas();
-              break;
-            case 2:
-              menu();
-              break;
-            default:
-              printf("Digite uma opção válida");
-              break;
-          }
-        }
-
-        //Função patra cadastro de turmas
-        void cadastrarTurma(){
-            do{
-            printf("\n====================================================\n OPÇÃO ESCOLHIDA:    3   | Cadastro de Turmas\n====================================================\n\n");
-            printf("Escolha a Disciplina: ");
-            for (num = 0; num <= posicaoDisciplina; num++){
-                printf("%i" "%s" "%s" "%s" ,num ," - ",disc[num].nomeDisciplina ," | ");
-              }
-              printf("\nOPÇÃO: ");
-              scanf("%i" ,&escolhaDisciplina);
-
-              printf("Escolha o Professor: ");
-              for (num = 0; num <= posicaoProfessor; num++){
-                  printf("%i" "%s" "%s" "%s" ,num ," - ",prof[num].nome ," | ");
-                }
-                printf("\nOPÇÃO: ");
-                scanf("%i" ,&escolhaProfessor);
-
-                printf("Escolha um horário: ");
-                scanf("%s" ,&escolhaHorario);
-
-              printf("\n\nESCOLHA UMA OPÇÃO: 1 - Realizar novo cadastro | 2 - Voltar ao menu\n" );
-              printf("OPÇÃO: ");
-              scanf("%i", &opcaoTurma);
-
-            switch (opcaoTurma) {
-              case 1:
-                posicaoTurma++;
-                cadastrarTurma();
-                break;
-              case 2:
-                menu();
-                break;
-              case 8:
-                exibirTurmas();
-              default:
-                printf("Digite uma opção válida");
-                break;
-            }
-          } while (opcaoTurma ==1);
-        }
-    //Função para leitura dos professores cadastrados
-    void exibirProfessores(){
-      for (num = 0; num <= posicaoProfessor; num++){
-          printf("%s" "%s" ,"\n\nNome: " ,prof[num].nome);
-          printf("%s" "%s" ,"\nCargo: " ,prof[num].cargo);
-          printf("%s" "%c" ,"\nDedicação Exclusiva: " ,prof[num].dedicacaoExclusiva);
-          printf("%s" "%c" ,"\nTitulação: " ,prof[num].titulacao);
-          printf("\n");
-        }
-    }
-
-    //Função para leitura das disciplinas cadastradas
-    void exibirDisciplinas(){
-      for (num = 0; num <= posicaoDisciplina; num++){
-          printf("%s" "%s" ,"\n\nDisciplina: " ,disc[num].nomeDisciplina);
-          printf("%s" "%i" ,"\nCarga Horária: " ,disc[num].cargaHoraria);
-          printf("\n");
-        }
-    }
-
-    //Função para leitura das turmas cadastradas VETORES PROFESSOR | DISCIPLINA | TURMAS
-    void exibirTurmas(){
-	//Vetor de disciplinas:
-        printf("%i" "%s" "%s" "%s" "%i"," - " ,"Nome: " ,disc[num].nomeDisciplina ,"Carga Horária: " ,disc[num].cargaHoraria);
-        printf("\n");
-        //Vetor de professores:
-        printf("%i" "%s" "%s" ," - " ,"Nome: " ,prof[num].nome);
-
-        //Vetor de Turmas:
-        printf("%s" "%s" "%s" "%s" ," - " ,"Disciplina: " ,disc[posicaoDisciplina].nomeDisciplina ,"Professor: " ,prof[posicaoProfessor].nome);
-
-            }
-
-    //Menu Principal do programa
-    int menu(){
-      printf("\nESCOLHA UMA OPÇÃO DESEJADA:\n\n====================================================\n OPÇÃO |       AÇÃO\n====================================================\n   1   | Cadastro de professores\n   2   | Cadastro de disciplinas\n   3   | Cadastro de turmas\n   4   | Cadastro de alunos\n   5   | Consulta de melhor aluno\n   6   | Disciplina com mais reprovações\n   7   | Sair\n\n");
-      printf("OPÇÃO: ");
-      scanf("%i", &opcaoMenu);
-        switch (opcaoMenu){
-        case 1:
-          cadastrarProfessores();
-          break;
-        case 2:
-          cadastrarDisciplinas();
-          break;
-          case 3:
-        cadastrarTurma();  
-          case 8:
-        exibirProfessores();          
-          break;
-        default:
-          printf (">>> Ação não implementada, escolha outra opção <<<");
-      }
-    }
-
-int main(void) {
+void cadastrarProfessores(){
+	int opc;
 	setlocale(LC_ALL,"portuguese");
+	if (quantidadeProfessores < 20){
+		for (i = 0; i < quantidadeProfessores; i++)
+		{
+		}
+		printf("\n==========================\n OPÇÃO ESCOLHIDA:\n==========================\n   1   | Cadastro de professores\n\n");
+		printf ("Nome: ");
+		scanf (" %s", &prof[i].nome);
+		printf ("Cargo: ");
+		scanf (" %s", &prof[i].cargo);
+		printf ("Dedicação exclusiva? S - Sim; N - Nao: ");
+		scanf (" %c", &prof[i].dedicacaoExclusiva);
+		printf ("Titulação: G - Graduado; E - Especialista; M - Mestre; D - Doutor: ");
+		scanf (" %c", &prof[i].titulacao);
+	}
+	else
+	{
+		printf ("Número máximo de professores atingido\n");
+	}
+	for (i = 0; i <= quantidadeProfessores; i++)
+	{
+		printf ("%d	%d	%s	%s	%c	%c\n", i + 1, quantidadeProfessores + 1, prof[i].nome, prof[i].cargo, prof[i].dedicacaoExclusiva, prof[i].titulacao);
+	}
+	quantidadeProfessores++;
+	printf ("Digite\n1 para cadastrar outro professor\n2 para voltar ao menu principal\n");
+	scanf ("%d", &opc);
+	switch (opc)
+	{
+		case 1:
+			cadastrarProfessores ();
+			break;
+		case 2:
+			main ();
+			break;
+		default:
+			printf ("Opção não existente");
+	}
+}
+
+void cadastrarDisciplinas(){
+	int opc;
+	setlocale(LC_ALL,"portuguese");
+	if (quantidadeDisciplinas < 20){
+		for (i = 0; i < quantidadeDisciplinas; i++)
+		{
+		}
+		printf("\n==========================\n OPÇÃO ESCOLHIDA:\n==========================\n   2   | Cadastro de disciplinas\n\n");
+		printf ("Nome: ");
+		scanf (" %s", &disc[i].nome);
+		printf ("Carga horária: ");
+		scanf ("%d", &disc[i].cargaHoraria);
+	}
+	else
+	{
+		printf ("Número máximode disciplinas atingido");
+	}
+	for (i = 0; i <= quantidadeDisciplinas; i++)
+	{
+		printf ("%d	%d	%s	%d\n", i + 1, quantidadeDisciplinas + 1, disc[i].nome, disc[i].cargaHoraria);
+	}
+	quantidadeDisciplinas++;
+	printf ("Digite\n1 para cadastrar outra disciplina\n2 para voltar ao menu principal\n");
+	scanf ("%d", &opc);
+	switch (opc)
+	{
+		case 1:
+			cadastrarDisciplinas ();
+			break;
+		case 2:
+			main ();
+			break;
+		default:
+			printf ("Opção não existente");
+	}
+}
+
+  void cadastrarTurmas(){
+	int opc, quantidadeProfessorTurma;
+	setlocale(LC_ALL,"portuguese");
+	if (quantidadeTurmas < 25)
+	{
+		for (i = 0; i < quantidadeTurmas; i++)
+		{
+		}
+		printf("\n==========================\n OPÇÃO ESCOLHIDA:\n==========================\n   3   | Cadastro de turmas\n\n");
+		printf ("Disciplina: ");
+		scanf (" %s", &turm[i].disciplinaTurma.nome);
+		printf ("Professor: ");
+		scanf (" %s", &turm[i].professorTurma.nome);
+		printf ("Horario: ");
+		scanf (" %s", &turm[i].horario);
+		for (j = 0; turm[i].disciplinaTurma.nome != disc[j].nome; j++)
+		{
+		}
+		turm[i].disciplinaTurma.cargaHoraria = disc[j].cargaHoraria;
+		for (quantidadeProfessorTurma = 0; quantidadeProfessorTurma < i; quantidadeProfessorTurma++)
+		{
+		}
+		if (quantidadeProfessorTurma < 3)
+		{
+			for (j = 0; turm[i].professorTurma.nome != prof[j].nome; j++)
+			{
+			}
+			strcpy (turm[i].professorTurma.cargo, prof[j].cargo);
+			turm[i].professorTurma.dedicacaoExclusiva = prof[j].dedicacaoExclusiva;
+			turm[i].professorTurma.titulacao = prof[j].titulacao;
+		}
+		else
+		{
+			strcpy (turm[i].disciplinaTurma.nome, turm[i + 1].disciplinaTurma.nome);
+			strcpy (turm[i].professorTurma.nome, turm[i + 1].professorTurma.nome);
+			strcpy (turm[i].horario, turm[i + 1].horario);
+			printf ("Número máximo de turmas atingido para o professor");
+			cadastrarTurmas ();			
+		}
+	}
+	else
+	{
+		printf ("Número máximo de turmas atingido");
+	}
+	for (i = 0; i <= quantidadeTurmas; i++)
+	{
+		printf ("%d	%d	%s	%s	%s\n", i + 1, quantidadeTurmas + 1, turm[i].disciplinaTurma.nome, turm[i].professorTurma.nome, turm[i].horario);
+	}
+	quantidadeTurmas++;
+	printf ("Digite\n1 para cadastrar outra turma\n2 para voltar ao menu principal\n");
+	scanf ("%d", &opc);
+	switch (opc)
+	{
+		case 1:
+			cadastrarTurmas ();
+			break;
+		case 2:
+			main ();
+			break;
+		default:
+			printf ("Opção não existente");
+	}
+  }
+  
+  void cadastrarAlunos(){
+	int opc;
+	setlocale(LC_ALL,"portuguese");
+	if (quantidadeAlunos < 500)
+	{
+		for (i = 0; i < quantidadeAlunos; i++)
+		{
+		}
+		printf("\n==========================\n OPÇÃO ESCOLHIDA:\n==========================\n   4   | Cadastro de alunos\n\n");
+		printf ("Nome: ");
+		scanf ("%s", &al[i].nome);
+		maisTurma = 1;
+		for (j = 0; maisTurma != 0; j++)
+		{
+			printf ("Numero da turma: ");
+			scanf ("%d", &numeroTurma);
+			for (k = 0; k < numeroTurma; k++)
+			{
+			}
+			strcpy (al[i].turmaAluno[j].disciplinaTurma.nome, turm[k].disciplinaTurma.nome);
+			strcpy (al[i].turmaAluno[j].professorTurma.nome, turm[k].professorTurma.nome);
+			strcpy (al[i].turmaAluno[j].horario, turm[k].horario);
+			printf ("Nota do aluno na disciplina: ");
+			scanf ("%f", &al[i].notas[j]);
+			printf ("Outra turma? Digite 0 para encerrar cadastro de turmas para o aluno. ");
+			scanf ("%d", &maisTurma);
+			al[i].quantidadeTurmasCursadas++;
+		}
+		for (i = 0; i <= quantidadeAlunos; i++)
+		{
+			for (j = 0; j < al[i].quantidadeTurmasCursadas; j++)
+			{
+				printf ("%s	%s	%s	%f\n", al[i].turmaAluno[j].disciplinaTurma.nome, al[i].turmaAluno[j].professorTurma.nome, al[i].turmaAluno[j].horario, al[i].notas[j]);
+			}
+			printf ("%d\n", al[i].quantidadeTurmasCursadas);
+		}
+	}
+	else
+	{
+		printf ("Numero maximo de alunos atingido");
+	}
+	for (i = 0; i <= quantidadeAlunos; i++)
+	{
+		printf ("%d	%d	%s\n", i + 1, quantidadeAlunos + 1, al[i].nome);
+	}
+	quantidadeAlunos++;
+	printf ("Digite\n1 para cadastrar outro aluno\n2 para voltar ao menu principal\n");
+	scanf ("%d", &opc);
+	switch (opc)
+	{
+		case 1:
+			cadastrarAlunos ();
+			break;
+		case 2:
+			main ();
+			break;
+		default:
+			printf ("Opcao nao existente");
+	}
+  }
+  
+  void consultarMelhorAluno(){
+  }
+  
+  void disciplinaComMaisReprovacoes(){
+  }
 
 
-    //Execução do menu principal
-    menu();
-
-    //Validação de dados cadastrados em professores e disciplinas
-    printf("\n====================================================\n PROFESSORES CADASTRADOS \n====================================================\n\n");
-    exibirProfessores();
-    printf("\n====================================================\n DISCIPLINAS CADASTRADAS \n====================================================\n\n");
-    exibirDisciplinas();
+int menu ()
+{
+	int opcao;
+	setlocale(LC_ALL,"portuguese");	
+	while (opcao != 7)
+	{
+		printf ("Digite\n1 para cadastrar professores\n2 para cadastrar disciplinas\n3 para cadastrar turmas\n4 para cadastrar alunos\n5 para consultar melhor aluno\n6 para disciplina com mais reprovações\n7 para sair\n");
+		scanf ("%d", &opcao);
+		return opcao;
+	}
+}
+int main ()
+{ 
+	int minhaOpcao = 8;
+	minhaOpcao = menu ();
+	setlocale(LC_ALL,"portuguese");
+	printf ("\n");
+	switch (minhaOpcao)
+	{
+		case 1:
+			cadastrarProfessores ();
+			break;
+		case 2:
+			cadastrarDisciplinas ();
+			break;
+		case 3:
+			cadastrarTurmas ();
+			break;
+		case 4:
+			cadastrarAlunos ();
+			break;
+		case 5:
+			consultarMelhorAluno ();
+			break;
+		case 6:
+			disciplinaComMaisReprovacoes ();
+			break;
+		case 7:
+			break;
+		default:
+			printf ("Opcao nao existente\n");
+	}
+	return 0;
 }
