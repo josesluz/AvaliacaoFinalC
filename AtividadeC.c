@@ -29,7 +29,9 @@ typedef struct{
 	float media;
 } aluno;
 
-int quantidadeProfessores = 0, quantidadeDisciplinas = 0, quantidadeTurmas = 0, quantidadeAlunos = 0, maisTurma, numeroTurma, numerodeTurmas = 0, i, j, k;
+int quantidadeProfessores = 0, quantidadeDisciplinas = 0, quantidadeTurmas = 0, quantidadeAlunos = 0, maisTurma = 1, numeroTurma, numerodeTurmas = 0, i, j, k;
+float mediaAux;
+char melhorAluno[40], alunoAux[40];
 professor prof[20];
 disciplina disc[20];
 turma turm[25];
@@ -179,6 +181,7 @@ void cadastrarDisciplinas(){
   
   void cadastrarAlunos(){
 	int opc;
+	float soma;
 	setlocale(LC_ALL,"portuguese");
 	if (quantidadeAlunos < 500)
 	{
@@ -191,6 +194,7 @@ void cadastrarDisciplinas(){
 		maisTurma = 1;
 		for (j = 0; maisTurma != 0; j++)
 		{
+			soma = 0;
 			printf ("Numero da turma: ");
 			scanf ("%d", &numeroTurma);
 			for (k = 0; k < numeroTurma; k++)
@@ -201,6 +205,12 @@ void cadastrarDisciplinas(){
 			strcpy (al[i].turmaAluno[j].horario, turm[k].horario);
 			printf ("Nota do aluno na disciplina: ");
 			scanf ("%f", &al[i].notas[j]);
+			for (k = -1; k < j; k++)
+			{
+				soma = soma + al[i].notas[j];
+			}
+			al[i].media = soma / (j + 1);
+			printf ("%f\n", al[i].media);
 			printf ("Outra turma? Digite 0 para encerrar cadastro de turmas para o aluno. ");
 			scanf ("%d", &maisTurma);
 			al[i].quantidadeTurmasCursadas++;
@@ -239,6 +249,17 @@ void cadastrarDisciplinas(){
   }
   
   void consultarMelhorAluno(){
+	for (i = 0; i <= quantidadeAlunos; i++)
+	{
+		if (al[i].media > mediaAux)
+		{
+			mediaAux = al[i].media;
+			strcpy (alunoAux, al[i].nome);
+		}
+	}
+	strcpy (melhorAluno, alunoAux);
+	printf ("O aluno de melhor e %d\n", melhorAluno);
+	main ();
   }
   
   void disciplinaComMaisReprovacoes(){
