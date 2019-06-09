@@ -130,7 +130,7 @@ void cadastrarDisciplinas(){
 		scanf (" %s", &turm[i].professorTurma.nome);
 		printf ("Horario: ");
 		scanf (" %s", &turm[i].horario);
-		for (j = 0; turm[i].disciplinaTurma.nome != disc[j].nome; j++)
+		for (j = 0; strcmp (turm[i].disciplinaTurma.nome, disc[j].nome) != 0; j++)
 		{
 		}
 		turm[i].disciplinaTurma.cargaHoraria = disc[j].cargaHoraria;
@@ -139,7 +139,7 @@ void cadastrarDisciplinas(){
 		}
 		if (quantidadeProfessorTurma < 3)
 		{
-			for (j = 0; turm[i].professorTurma.nome != prof[j].nome; j++)
+			for (j = 0; strcmp (turm[i].professorTurma.nome, prof[j].nome) != 0; j++)
 			{
 			}
 			strcpy (turm[i].professorTurma.cargo, prof[j].cargo);
@@ -258,11 +258,29 @@ void cadastrarDisciplinas(){
 		}
 	}
 	strcpy (melhorAluno, alunoAux);
-	printf ("O aluno de melhor e %d\n", melhorAluno);
+	printf ("O aluno de melhor e %s\n", melhorAluno);
 	main ();
   }
   
   void disciplinaComMaisReprovacoes(){
+  	int reprovacoes = 0;
+  	int auxDiscReprovacoes = 0;
+  	for (i = 0; i < quantidadeTurmas; i++){
+  		for (j = 0; j < quantidadeAlunos; j++){
+  			for (k = 0; strcmp (al[j].turmaAluno[k].disciplinaTurma.nome, turm[i].disciplinaTurma.nome) != 0; k++){  				
+			}
+			if (al[j].notas[k] < 7){
+				reprovacoes++;
+			}
+		}
+		if (reprovacoes > auxDiscReprovacoes){
+			auxDiscReprovacoes = reprovacoes;
+		}
+	}
+	printf ("Disciplinas com mais reprovacoes: \n");
+  	for (i = 0; i < quantidadeTurmas; i++){
+  		printf ("%s\n", turm[i].disciplinaTurma.nome);
+	}
   }
 
 
